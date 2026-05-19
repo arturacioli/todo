@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-type Cfg = struct{
+type Cfg struct{
 	PathToCsv string	
 }
 
@@ -19,12 +19,11 @@ type Cli struct{
 	Cfg       *Cfg
 }
 
-func (cli *Cli)AddCommand(name string,
-				handler func(args []string)){
-	
+func (cli *Cli)AddCommand(name string, handler func(args []string)){
 	newCmd := Command{
 		Handler: handler,
 	}
+
 	cli.Commands[name] = newCmd
 }
 
@@ -43,7 +42,7 @@ func main(){
 		os.Exit(1)
 	}
 	cfg := Cfg{
-		PathToCsv: "",
+		PathToCsv: "todo.csv",
 	}
 	cli := Cli{
 		Commands: make(map[string]Command),
@@ -52,15 +51,11 @@ func main(){
 	}
 
 
-	cli.AddCommand("add",testeAdd)
+	cli.AddCommand("add",cli.HandlerAdd)
 
 	
 	command := os.Args[1]
 	cli.ExecuteCommand(command)
-}
-
-func testeAdd(args []string){
-	fmt.Print("add funcionando")
 }
 
 
