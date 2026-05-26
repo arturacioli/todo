@@ -3,11 +3,10 @@ package main
 import (
 	"fmt"
 	"os"
-)
 
-type Cfg struct{
-	PathToCsv string	
-}
+	"github.com/arturacioli/todo/internal/storage"
+	"github.com/arturacioli/todo/internal/task"
+)
 
 type Command struct{
 	Handler func(args []string)
@@ -16,7 +15,7 @@ type Command struct{
 type Cli struct{
 	Commands  map[string]Command
 	Arguments []string
-	Cfg       *Cfg
+	Tasks     []task.Task 
 }
 
 func (cli *Cli)AddCommand(name string, handler func(args []string)){
@@ -41,17 +40,24 @@ func main(){
 		fmt.Println("Usage: <command> [args]")
 		os.Exit(1)
 	}
-	cfg := Cfg{
-		PathToCsv: "todo.csv",
+
+	tasks, err := storage.LoadTasks()
+	if err != nil{
+		fmt.Printf("Error loading/creating csv: %v", err)
+		os.Exit(1)
 	}
+
 	cli := Cli{
 		Commands: make(map[string]Command),
 		Arguments: os.Args[2:],
-		Cfg: &cfg,
+		Tasks: tasks,
 	}
 
 
 	cli.AddCommand("add",cli.HandlerAdd)
+	cli.AddCommand("list",cli.HandlerList)
+	cli.AddCommand("complete",cli.HandlerComplete)
+	cli.AddCommand("delete",cli.HandlerDelete)
 
 	
 	command := os.Args[1]
