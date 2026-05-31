@@ -15,7 +15,7 @@ A simple command-line todo application written in Go.
 Clone the repository:
 
 ```bash
-git clone https://github.com/artuacioli/todo.git
+git clone https://github.com/arturacioli/todo.git
 cd todo
 ```
 
