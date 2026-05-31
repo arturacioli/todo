@@ -12,8 +12,11 @@ import (
 
 
 func (cli *Cli)HandlerAdd(args [] string){
-
-	nextId, err := cli.GetNextId()
+	if len(args) < 1 {
+		fmt.Println("Usage: add <task description>")
+		return
+	}
+	nextId, err := storage.GetNextId(cli.Tasks)
 	if err != nil{
 		fmt.Printf("Erro ao gerar id %v\n",err)
 		return
@@ -33,20 +36,8 @@ func (cli *Cli)HandlerAdd(args [] string){
 		return
 	}
 
+	fmt.Println("Task added!")
+
 }
 
-func (cli *Cli)GetNextId() (int,error){
-	lastID := 0
-	for _, t := range cli.Tasks {
-		id, err := strconv.Atoi(t.Id)
-		if err != nil {
-			continue
-		}
 
-		if id > lastID {
-			lastID = id
-		}
-	}
-
-	return lastID + 1, nil
-}

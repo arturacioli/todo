@@ -61,7 +61,10 @@ func main(){
 
 	
 	command := os.Args[1]
-	cli.ExecuteCommand(command)
+	if err := cli.ExecuteCommand(command); err != nil{
+		fmt.Print(err)
+		os.Exit(1)
+	}
 }
 
 

@@ -79,3 +79,19 @@ func WriteTasks(tasks []task.Task) error{
 
 	return nil
 }
+
+func GetNextId(tasks []task.Task) (int,error){
+	lastID := 0
+	for _, t := range tasks {
+		id, err := strconv.Atoi(t.Id)
+		if err != nil {
+			continue
+		}
+
+		if id > lastID {
+			lastID = id
+		}
+	}
+
+	return lastID + 1, nil
+}
